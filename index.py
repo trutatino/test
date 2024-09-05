@@ -1,4 +1,4 @@
 def hello(name):
-    return list(char for char in name)
+    return "Hello, " + name + "!"
 
 print(hello("Bohdan"))
