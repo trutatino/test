@@ -1,0 +1,25 @@
+
+  name: Test Workflow
+  on:
+    workflow_dispatch:
+  jobs:
+    test-job:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+        - name: Run test command
+          run: |
+            echo "This is a test workflow for PR #33"
+            echo "Repository: trutatino/test"
+            echo "PR branch: new"
+            echo "Base branch: main"
+        - name: Create test artifact
+          run: |
+            echo "Test artifact content" > test_artifact.txt
+        - name: Upload artifact
+          uses: actions/upload-artifact@v2
+          with:
+            name: test-artifact
+            path: test_artifact.txt
+      
