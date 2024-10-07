@@ -30,13 +30,20 @@ jobs:
       if: always()
       run: echo "CURRENT_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
+    - name: Compress report directory
+      if: always()
+      run: |
+        zip -r "playwright-report-test-${{ env.CURRENT_DATE }}.zip" artifact/
+
+
     - name: Upload report to Azure File Share
       if: always()
       run: |
-        az storage file upload-batch \
+        az storage file upload \
           --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT }} \
-          --destination "playwright-reports-aqa" \
-          --source artifact/ \
+          --share-name ${{ secrets.AZURE_FILE_SHARE }} \
+          --source "playwright-report-test-${{ env.CURRENT_DATE }}.zip" \
+          --path "playwright-report-test-${{ env.CURRENT_DATE }}.zip" \
           --sas-token "${{ secrets.AZURE_STORAGE_SAS_TOKEN }}"
 
       
