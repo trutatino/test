@@ -26,11 +26,17 @@ jobs:
     #- name: Install Azure CLI
     #  run: |
     #    curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+    - name: Get current date
+      if: always()
+      run: echo "CURRENT_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
-    - name: Upload artifact to Azure File Share
+    - name: Upload report to Azure File Share
+      if: always()
       run: |
-        az storage file upload \
+        az storage file upload-batch \
           --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT }} \
-          --share-name ${{ secrets.AZURE_FILE_SHARE }} \
-          --source artifact/test-file.txt \
+          --destination "test-test-${{ env.CURRENT_DATE }}" \
+          --source artifact/ \
           --sas-token "${{ secrets.AZURE_STORAGE_SAS_TOKEN }}"
+
+      
