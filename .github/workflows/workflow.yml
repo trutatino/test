@@ -35,7 +35,7 @@ jobs:
       run: |
         az storage file upload-batch \
           --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT }} \
-          --destination "test-test-${{ env.CURRENT_DATE }}" \
+          --destination "playwright-reports-aqa" \
           --source artifact/ \
           --sas-token "${{ secrets.AZURE_STORAGE_SAS_TOKEN }}"
 
