@@ -1,0 +1,36 @@
+name: Create and Upload Test Artifact to Azure File Share
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Create a test artifact
+      run: |
+        mkdir -p artifact
+        echo "This is a test artifact" > artifact/test-file.txt
+
+    - name: Upload artifact to GitHub
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-artifact
+        path: artifact/test-file.txt
+
+    #- name: Install Azure CLI
+    #  run: |
+    #    curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+    - name: Upload artifact to Azure File Share
+      run: |
+        az storage file upload \
+          --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT }} \
+          --share-name ${{ secrets.AZURE_FILE_SHARE }} \
+          --source artifact/test-file.txt \
+          --sas-token "${{ secrets.AZURE_STORAGE_SAS_TOKEN }}"
