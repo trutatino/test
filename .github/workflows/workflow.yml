@@ -33,7 +33,7 @@ jobs:
     - name: Compress report directory
       if: always()
       run: |
-        zip -r "playwright-report-test-${{ env.CURRENT_DATE }}.zip" artifact/
+        zip -r "playwright-report-test-${{ env.CURRENT_DATETIME }}.zip" artifact/
 
 
     - name: Upload report to Azure File Share
@@ -42,8 +42,8 @@ jobs:
         az storage file upload \
           --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT }} \
           --share-name ${{ secrets.AZURE_FILE_SHARE }} \
-          --source "playwright-report-test-${{ env.CURRENT_DATE }}.zip" \
-          --path "playwright-report-test-${{ env.CURRENT_DATE }}.zip" \
+          --source "playwright-report-test-${{ env.CURRENT_DATETIME }}.zip" \
+          --path "playwright-report-test-${{ env.CURRENT_DATETIME }}.zip" \
           --sas-token "${{ secrets.AZURE_STORAGE_SAS_TOKEN }}"
 
       
